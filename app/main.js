@@ -5,11 +5,12 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-function prompt(){
-  rl.question('$ ', (answer) => {
-    console.log(`${answer}: command not found`)
-    prompt()
-  });
-}
+rl.setPrompt("$ ");
+rl.prompt();
 
-prompt()
+
+rl.on("line", async (line) => {
+  console.log(`${line}: command not found`)
+  rl.prompt()
+})
+
