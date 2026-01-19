@@ -5,22 +5,30 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-rl.setPrompt("$ ");
-rl.prompt();
+const prompt = () => {
+  rl.question("$ ", (answer) => {
+    const commands = answer.split(" ")
+    const cmd = commands[0] 
+    if(cmd === "exit"){
+      process.exit(0)
+    }
+    else if(cmd === "echo"){
+      const args = commands.slice(1).join(" ")
+      console.log(args)
+    }
+    else if(cmd === "type"){
+      let nxt = commands[1]
+      if(nxt === "echo" || nxt === "type" || nxt === "exit"){
+        console.log(`${nxt} is a shell builtin`)
+      }else{
+        console.log(`${nxt}: not found`)
+      }
+    }
+    else{
+      console.log(`${cmd}: command not found`)
+    }
+    prompt()
+  });
+}
 
-
-rl.on("line", async (line) => {
-  let arr = line.split(" ")
-  if(arr[0] === "echo"){
-    console.log(arr.slice(1).join(" "))
-    rl.prompt()
-  }
-  else if(!(line === "exit")){
-    console.log(`${line}: command not found`)
-    rl.prompt()
-  }
-  else{
-    rl.close()
-  }
-})
-
+prompt()
