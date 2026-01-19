@@ -10,7 +10,12 @@ rl.prompt();
 
 
 rl.on("line", async (line) => {
-  console.log(`${line}: command not found`)
-  rl.prompt()
+  if(!(line === "exit")){
+    console.log(`${line}: command not found`)
+    rl.prompt()
+  }
+  else{
+    rl.close()
+  }
 })
 
