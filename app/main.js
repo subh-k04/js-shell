@@ -10,10 +10,9 @@ rl.prompt();
 
 
 rl.on("line", async (line) => {
-  let part = line.slice(0, 4)
-  let size = line.length
-  if(part === "echo"){
-    console.log(line.slice(5, size))
+  let arr = line.split(" ")
+  if(arr[0] === "echo"){
+    console.log(arr.slice(1).join(" "))
     rl.prompt()
   }
   else if(!(line === "exit")){
