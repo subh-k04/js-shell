@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const { constants } = require("fs");
 const { spawn } = require("child_process")
+// const { process } = require("process");
 
 
 const rl = readline.createInterface({
@@ -47,7 +48,7 @@ const prompt = () => {
         return
       }
       let nxt = commands[1]
-      if(nxt === "echo" || nxt === "type" || nxt === "exit"|| nxt === "pwd"){
+      if(nxt === "echo" || nxt === "type" || nxt === "exit"|| nxt === "pwd" || nxt === "cd"){
         console.log(`${nxt} is a shell builtin`)
       }else{
         const out = findExecPath(nxt, directories)
@@ -58,7 +59,27 @@ const prompt = () => {
       }
       prompt()
     }
+    else if(cmd === "cd"){
+      let targetDir = commands[1]
+      try{
+        const stats = fs.statSync(targetDir)
+        if(!stats.isDirectory()){
+          console.log(`${cmd}: ${targetDir}: Not a directory`)
+          prompt()
+          return
+        }
+        fs.accessSync(targetDir, constants.X_OK)
+        process.chdir(targetDir)
+      }catch(err){
+        console.log(`${cmd}: ${targetDir}: No such file or directory`)
+      }
+      prompt()
+    }
     else{
+      if(cmd.length == 0){
+        prompt()
+        return
+      }
       const out = findExecPath(cmd, directories)
       if(out != null){
         const child = spawn(out, commands.slice(1), {argv0: cmd})
