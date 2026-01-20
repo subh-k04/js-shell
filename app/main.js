@@ -32,6 +32,10 @@ const prompt = () => {
     if(cmd === "exit"){
       process.exit(0)
     }
+    else if(cmd === "pwd"){
+      console.log(process.cwd())
+      prompt()
+    }
     else if(cmd === "echo"){
       const args = commands.slice(1).join(" ")
       console.log(args)
@@ -43,7 +47,7 @@ const prompt = () => {
         return
       }
       let nxt = commands[1]
-      if(nxt === "echo" || nxt === "type" || nxt === "exit"){
+      if(nxt === "echo" || nxt === "type" || nxt === "exit"|| nxt === "pwd"){
         console.log(`${nxt} is a shell builtin`)
       }else{
         const out = findExecPath(nxt, directories)
